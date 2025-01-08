@@ -9,9 +9,13 @@ app.use(bodyParser.json());
 
 // DO NOT USE IN PROD
 const publicKey =
-  "BDpN1b0pwhKIKo7GIr_NMgeugUBfthmtuY_B-Z2NyBc2SlX25ziqGvu-COTn_FhSJQoFxgY7F3-kfjMQZQVSsvA";
-const privateKey = "0qish-rDfXIDHhH8qmfZN6xzfwOFsphgLzk9tW4ypew";
-webPush.setVapidDetails("mailto:example@yourdomain.org", publicKey, privateKey);
+  "BDwHGzhI5w6HTrLP6LRF48oEHxaXGkjPnfdjx8hQWV43PrsSNru7t6ucBn_lOG1J74ktXqQOfuUVF5rwJ2WoV5w";
+const privateKey = "prT637bgA-IqC4IYA6OR0_fbZqFzSR1vabKwcm7ezQ0";
+webPush.setVapidDetails(
+  "mailto:tejudharanesh1234@gmail.com",
+  publicKey,
+  privateKey
+);
 
 const subscriptions = {};
 
@@ -21,18 +25,27 @@ app.post("/subscribe", (req, res) => {
   return res.status(201).json({ data: { success: true } });
 });
 
-app.post("/send", (req, res) => {
+app.post("/send", async (req, res) => {
   const { message, title, id } = req.body;
+
+  if (!subscriptions[id]) {
+    return res
+      .status(404)
+      .json({ data: { success: false, message: "Subscription not found" } });
+  }
+
   const subscription = subscriptions[id];
   const payload = JSON.stringify({ title, message });
-  webPush
-    .sendNotification(subscription, payload)
-    .catch((error) => {
-      return res.status(400).json({ data: { success: false } });
-    })
-    .then((value) => {
-      return res.status(201).json({ data: { success: true } });
-    });
+
+  try {
+    await webPush.sendNotification(subscription, payload);
+    return res.status(201).json({ data: { success: true } });
+  } catch (error) {
+    console.error("Notification error:", error);
+    return res
+      .status(400)
+      .json({ data: { success: false, error: error.message } });
+  }
 });
 
 app.get("/info", (req, res) => {

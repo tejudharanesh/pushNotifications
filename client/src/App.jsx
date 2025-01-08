@@ -10,7 +10,7 @@ import { QRCode, QRSvg } from "sexy-qr";
 
 // in PROD use from .env
 const PUBLIC_KEY =
-  "BDpN1b0pwhKIKo7GIr_NMgeugUBfthmtuY_B-Z2NyBc2SlX25ziqGvu-COTn_FhSJQoFxgY7F3-kfjMQZQVSsvA";
+  "BDwHGzhI5w6HTrLP6LRF48oEHxaXGkjPnfdjx8hQWV43PrsSNru7t6ucBn_lOG1J74ktXqQOfuUVF5rwJ2WoV5w";
 
 function App() {
   const [loadingSubscribe, setLoadingSubscribe] = useState(false);
@@ -110,9 +110,7 @@ function App() {
         <div>
           <div className="message">
             <div className="title">Use as PWA</div>
-           
           </div>
-         
         </div>
         <div className="tabs">
           <div className="tab-item">
@@ -179,8 +177,7 @@ function App() {
             </form>
           </div>
         )}
-        <div>
-        </div>
+        <div></div>
       </main>
       <Toaster />
     </div>
